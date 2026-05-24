@@ -1,9 +1,6 @@
 from mcp.server.fastmcp import FastMCP
+import uvicorn
 import os
-
-# Set environment variables BEFORE creating FastMCP
-os.environ["HOST"] = "0.0.0.0"
-os.environ["PORT"] = os.environ.get("PORT", "8000")
 
 mcp = FastMCP("Calculator")
 
@@ -29,5 +26,9 @@ def divide(a: float, b: float) -> float:
         return "Error: Cannot divide by zero!"
     return a / b
 
+# Get the ASGI app from FastMCP
+app = mcp.sse_app()
+
 if __name__ == "__main__":
-    mcp.run(transport="sse")
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run(app, host="0.0.0.0", port=port)
