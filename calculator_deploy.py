@@ -1,10 +1,6 @@
 from mcp.server.fastmcp import FastMCP
 import os
 
-# Tell MCP which port to use via environment variable
-os.environ["FASTMCP_PORT"] = os.environ.get("PORT", "8000")
-os.environ["FASTMCP_HOST"] = "0.0.0.0"
-
 # Create your MCP server
 mcp = FastMCP("Calculator")
 
@@ -31,4 +27,10 @@ def divide(a: float, b: float) -> float:
     return a / b
 
 if __name__ == "__main__":
-    mcp.run(transport="sse")
+    port = int(os.environ.get("PORT", 8000))
+    mcp.run(
+        transport="streamable-http",
+        host="0.0.0.0",
+        port=port,
+        path="/mcp"
+    )
