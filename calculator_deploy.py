@@ -1,6 +1,7 @@
 from mcp.server.fastmcp import FastMCP
+import os
 
-# Create your MCP server with SSE transport for deployment
+# Create your MCP server
 mcp = FastMCP("Calculator")
 
 @mcp.tool()
@@ -26,5 +27,6 @@ def divide(a: float, b: float) -> float:
     return a / b
 
 if __name__ == "__main__":
-    # SSE transport makes it work over the internet!
-    mcp.run(transport="sse")
+    # Get port from Railway environment
+    port = int(os.environ.get("PORT", 8000))
+    mcp.run(transport="sse", host="0.0.0.0", port=port)
